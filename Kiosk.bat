@@ -3,7 +3,29 @@ cd /d "%~dp0" && ( if exist "%temp%\getadmin.vbs" del "%temp%\getadmin.vbs" ) &&
 
 @echo off
 :: Disable Task Manager
-@rem reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d 1 /f
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableTaskMgr /t REG_DWORD /d 1 /f
+
+:: Disable USB Storage write access (file transfer)
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\StorageDevicePolicies" /v WriteProtect /t REG_DWORD /d 1 /f
+
+:: Disable USB Storage read access (file reading)
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start /t REG_DWORD /d 4 /f
+
+:: Disable Ctrl+Alt+Delete options by hiding the security screen
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableLockWorkstation /t REG_DWORD /d 1 /f
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v DisableChangePassword /t REG_DWORD /d 1 /f
+
+:: Hide "This PC" and other Explorer windows
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoViewOnDrive /t REG_DWORD /d 1 /f
+
+:: Disable File Explorer for the current user by hiding Desktop and Explorer access
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoFileFolderOpening /t REG_DWORD /d 1 /f
+
+:: Disable write access to USB devices
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoDrives /t REG_DWORD /d 4 /f
+
+:: Disable desktop icons by setting NoDesktop key in the registry
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoDesktop /t REG_DWORD /d 1 /f
 
 :: Disable Win+R and other hotkeys
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoWinKeys /t REG_DWORD /d 1 /f
@@ -13,6 +35,12 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Ex
 
 :: Disable Control Panel and Settings
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoControlPanel /t REG_DWORD /d 1 /f
+
+:: Disable access to Recycle Bin
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoRecycleBin" /t REG_DWORD /d 1 /f
+
+:: Disable Command Prompt for the current user
+@rem reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\System" /v DisableCMD /t REG_DWORD /d 2 /f
 
 :: Create a Chrome startup shortcut
 setlocal
@@ -25,7 +53,7 @@ set "kioskURL=https://training-nazhealth-kudjip-png.trias.in"  :: Change to your
 set "launchKiosk=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\launchKiosk.bat"
 (
 echo @echo off
-echo "%chromePath%" --kiosk --disable-infobars --use-fake-ui-for-media-stream --no-first-run %kioskURL%
+echo "%chromePath%" --incognito --kiosk --disable-infobars --use-fake-ui-for-media-stream --no-first-run %kioskURL%
 echo shutdown /l
 ) > "%launchKiosk%"
 
@@ -33,7 +61,7 @@ echo shutdown /l
 set "launchAHK=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\launchAHK.bat"
 (
 echo @echo off
-echo start "" "C:\Users\Admin\Desktop\Utilities\2\AutoHotkey.ahk"
+echo start "" "%userprofile%\Desktop\Utilities\2\AutoHotkey.ahk"
 ) > "%launchAHK%"
 
 :: Give the batch files execute permissions (optional)
@@ -58,7 +86,7 @@ cls
 echo All settings have been applied. The system will log out in
 
 :: Countdown from 5 to 1
-for /l %%i in (5,-1,1) do ( 
+for /l %%i in (5,-1,1) do (
     echo %%i seconds....
     timeout /t 1 >nul
 )
