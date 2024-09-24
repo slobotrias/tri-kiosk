@@ -36,6 +36,13 @@ reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies
 :: Enable access to Recycle Bin
 reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoRecycleBin" /f
 
+:: Disable AutoAdminLogon
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /d "0" /f
+
+:: Remove DefaultPassword entry for security
+@rem reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /f
+
+
 echo Revert script executed successfully.
 
 @echo off
