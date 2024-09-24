@@ -45,6 +45,16 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Ex
 :: Create a Chrome startup shortcut
 setlocal
 
+set "username=%USERNAME%"
+
+rem Prompt for the password (since storing it in plain text isn't ideal)
+set /p "password=Enter password for %username%: "
+
+rem Set registry keys for auto login with the current username
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /d "%username%" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /d "%password%" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /d "1" /f
+
 :: Set up Chrome to run in kiosk mode with specified URL
 set "chromePath=C:\Program Files\Google\Chrome\Application\chrome.exe"
 set "kioskURL=https://training-nazhealth-kudjip-png.trias.in"  :: Change to your desired URL
