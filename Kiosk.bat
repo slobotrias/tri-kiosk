@@ -39,6 +39,15 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Ex
 :: Disable access to Recycle Bin
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoRecycleBin" /t REG_DWORD /d 1 /f
 
+:: Disabling right-click context menu in Windows Explorer for the current user.
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoViewContextMenu /t REG_DWORD /d 1 /f
+
+:: Disabling read access to USB drives for the current user.
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\RemovableStorageDevices" /v Deny_Read /t REG_DWORD /d 1 /f
+
+:: Disabling write access to USB drives for the current user.
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\RemovableStorageDevices" /v Deny_Write /t REG_DWORD /d 1 /f
+
 :: Disable Command Prompt for the current user
 @rem reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\System" /v DisableCMD /t REG_DWORD /d 2 /f
 
