@@ -47,6 +47,8 @@ setlocal
 
 set "username=%USERNAME%"
 
+cls
+
 rem Prompt for the password (since storing it in plain text isn't ideal)
 set /p "password=Enter password for %username%: "
 
