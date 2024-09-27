@@ -26,6 +26,20 @@ Down::Return
 Left::Return
 Right::Return
 
+; Disable all function keys (F1 to F12)
+F1::return
+F2::return
+F3::return
+F4::return
+F6::return
+F7::return
+F8::return
+F9::return
+F10::return
+F11::return
+F12::return
+
+
 WatchKeys:
     ; Disable all other keys
     Key := GetKeyState("VK")
