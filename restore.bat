@@ -39,6 +39,16 @@ reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies
 :: Disable AutoAdminLogon
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /d "0" /f
 
+:: Enabling right-click context menu in Windows Explorer for the current user (reverts the first command).
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoViewContextMenu /t REG_DWORD /d 0 /f
+
+:: Enabling read access to USB drives for the current user (reverts read restriction).
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\RemovableStorageDevices" /v Deny_Read /t REG_DWORD /d 0 /f
+
+:: Enabling write access to USB drives for the current user (reverts write restriction).
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\RemovableStorageDevices" /v Deny_Write /t REG_DWORD /d 0 /f
+
+
 :: Remove DefaultPassword entry for security
 @rem reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /f
 
